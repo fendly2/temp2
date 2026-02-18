@@ -221,6 +221,13 @@
             flex-shrink: 0;
         }
 
+        .header-divider {
+            width: 1px;
+            height: 16px;
+            background: var(--divider);
+            margin: 0 4px;
+        }
+
         .theme-dots { 
             display: flex; 
             gap: 7px;  
@@ -702,6 +709,39 @@
             background: var(--bg-tertiary); 
         }
 
+
+        .setup-guide {
+            padding: 24px;
+            text-align: center;
+            color: var(--text-secondary);
+        }
+
+        .setup-guide-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+        }
+
+        .setup-guide-title {
+            margin: 0 0 12px 0;
+            color: var(--text-primary);
+        }
+
+        .setup-guide-text {
+            margin: 0 0 20px 0;
+            line-height: 1.6;
+        }
+
+        .setup-guide-action {
+            padding: 10px 24px;
+            background: var(--accent-color);
+            color: var(--accent-text);
+            border: none;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            font-size: 15px;
+            font-weight: 500;
+        }
+
         .hidden {
             display: none !important;
         }
@@ -717,7 +757,7 @@
                 <div class="theme-dot" data-theme="purple" title="Purple"></div>
                 <div class="theme-dot" data-theme="colorful" title="Colorful"></div>
             </div>
-            <div style="width: 1px; height: 16px; background: var(--divider); margin: 0 4px;"></div>
+            <div class="header-divider"></div>
             <button class="icon-btn" id="openSettingsBtn" title="Settings">
                 <svg viewBox="0 0 24 24"><path d="M19.14,12.94c0.04-0.3,0.06-0.61,0.06-0.94c0-0.32-0.02-0.64-0.07-0.94l2.03-1.58c0.18-0.14,0.23-0.41,0.12-0.61 l-1.92-3.32c-0.12-0.22-0.37-0.29-0.59-0.22l-2.39,0.96c-0.5-0.38-1.03-0.7-1.62-0.94L14.4,2.81c-0.04-0.24-0.24-0.41-0.48-0.41 h-3.84c-0.24,0-0.43,0.17-0.47,0.41L9.25,5.35C8.66,5.59,8.12,5.92,7.63,6.29L5.24,5.33c-0.22-0.08-0.47,0-0.59,0.22L2.74,8.87 C2.62,9.08,2.66,9.34,2.86,9.48l2.03,1.58C4.84,11.36,4.8,11.69,4.8,12s0.02,0.64,0.07,0.94l-2.03,1.58 c-0.18,0.14-0.23,0.41-0.12,0.61l1.92,3.32c0.12,0.22,0.37,0.29,0.59,0.22l2.39-0.96c0.5,0.38,1.03,0.7,1.62,0.94l0.36,2.54 c0.05,0.24,0.24,0.41,0.48,0.41h3.84c0.24,0,0.44-0.17,0.47-0.41l0.36-2.54c0.59-0.24,1.13-0.56,1.62-0.94l2.39,0.96 c0.22,0.08,0.47,0,0.59-0.22l1.92-3.32c0.12-0.22,0.07-0.47-0.12-0.61L19.14,12.94z M12,15.6c-1.98,0-3.6-1.62-3.6-3.6 s1.62-3.6,3.6-3.6s3.6,1.62,3.6,3.6S13.98,15.6,12,15.6z"/></svg>
             </button>
@@ -822,6 +862,8 @@
                 inputPanel: document.getElementById('inputPanel'),
                 outputPanel: document.getElementById('outputPanel'),
                 resizeHandle: document.getElementById('resizeHandle'),
+                languageButtonsContainer: document.getElementById('languageButtonsContainer'),
+                themeDotsContainer: document.querySelector('.theme-dots'),
                 inputTextarea: document.getElementById('inputText'),
                 resultTextarea: document.getElementById('resultText'),
                 chatContainer: document.getElementById('chatContainer'),
@@ -1003,22 +1045,13 @@ Answer questions directly and professionally.`
             function showInlineSetupGuide() {
                 if (selectedLanguageValue === 'chat') {
                     elements.chatContainer.innerHTML = `
-                        <div style="padding: 24px; text-align: center; color: var(--text-secondary);">
-                            <div style="font-size: 48px; margin-bottom: 16px;">⚙️</div>
-                            <h3 style="margin: 0 0 12px 0; color: var(--text-primary);">Setup Required</h3>
-                            <p style="margin: 0 0 20px 0; line-height: 1.6;">
+                        <div class="setup-guide">
+                            <div class="setup-guide-icon">⚙️</div>
+                            <h3 class="setup-guide-title">Setup Required</h3>
+                            <p class="setup-guide-text">
                                 Please configure your API credentials to start using the translator.
                             </p>
-                            <button onclick="document.getElementById('openSettingsBtn').click()" style="
-                                padding: 10px 24px;
-                                background: var(--accent-color);
-                                color: white;
-                                border: none;
-                                border-radius: 8px;
-                                cursor: pointer;
-                                font-size: 15px;
-                                font-weight: 500;
-                            ">Open Settings</button>
+                            <button id="openSetupFromInline" class="setup-guide-action">Open Settings</button>
                         </div>
                     `;
                 } else {
@@ -1153,11 +1186,13 @@ Need help? Contact your Dell IT administrator.`;
                 userIsAtBottom = isAtBottom();
             });
 
-            function escapeHtml(text) {
-                const div = document.createElement('div');
-                div.textContent = text;
-                return div.innerHTML;
-            }
+            elements.chatContainer.addEventListener('click', (event) => {
+                const setupButton = event.target.closest('#openSetupFromInline');
+                if (!setupButton) return;
+
+                loadSettings();
+                setModalVisibility(elements.settingsModal, true);
+            });
 
             function clearChat() {
                 chatHistory = [];
@@ -1188,24 +1223,22 @@ Need help? Contact your Dell IT administrator.`;
                     }
                 });
             }
-            
-            elements.themeDots.forEach(dot => {
-                dot.addEventListener('click', () => switchTheme(dot.dataset.theme));
+
+            elements.themeDotsContainer.addEventListener('click', (event) => {
+                const dot = event.target.closest('.theme-dot');
+                if (!dot) return;
+                switchTheme(dot.dataset.theme);
             });
 
-            function toggleModal(show) {
-                if (show) {
-                    elements.settingsModal.classList.add('active');
-                } else {
-                    elements.settingsModal.classList.remove('active');
-                }
+            function setModalVisibility(modalElement, show) {
+                modalElement.classList.toggle('active', show);
             }
             
             elements.openSettingsBtn.addEventListener('click', () => {
                 loadSettings();
-                toggleModal(true);
+                setModalVisibility(elements.settingsModal, true);
             });
-            elements.closeSettingsBtn.addEventListener('click', () => toggleModal(false));
+            elements.closeSettingsBtn.addEventListener('click', () => setModalVisibility(elements.settingsModal, false));
             
             async function saveSettings() {
                 const settings = {
@@ -1232,7 +1265,7 @@ Need help? Contact your Dell IT administrator.`;
                 elements.saveSettingsButton.textContent = 'Saved!';
                 setTimeout(() => {
                     elements.saveSettingsButton.textContent = originalText;
-                    toggleModal(false);
+                    setModalVisibility(elements.settingsModal, false);
                 }, 600);
             }
 
@@ -1381,6 +1414,27 @@ Need help? Contact your Dell IT administrator.`;
                 return `${BASE_URL}/chat/completions`;
             }
 
+            async function requestChatCompletion({ config, messages, signal }) {
+                const auth = btoa(`${config.clientId}:${config.clientSecret}`);
+
+                return fetch(buildApiUrl(), {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': `Basic ${auth}`,
+                        'Content-Type': 'application/json',
+                        'x-correlation-id': crypto.randomUUID()
+                    },
+                    body: JSON.stringify({
+                        model: config.modelName,
+                        messages,
+                        temperature: parseFloat(config.temperature),
+                        max_tokens: parseInt(config.maxTokens),
+                        stream: true
+                    }),
+                    signal
+                });
+            }
+
             async function handleTranslate() {
                 const text = elements.inputTextarea.value.trim();
                 if (!text) return;
@@ -1411,8 +1465,6 @@ Need help? Contact your Dell IT administrator.`;
                 elements.progressBarFill.style.width = '20%';
 
                 try {
-                    const auth = btoa(`${config.clientId}:${config.clientSecret}`);
-                    
                     let messages = [];
                     if (selectedLanguageValue === 'chat') {
                         messages = [
@@ -1424,20 +1476,9 @@ Need help? Contact your Dell IT administrator.`;
                         messages = payload.messages;
                     }
 
-                    const response = await fetch(buildApiUrl(), {
-                        method: 'POST',
-                        headers: {
-                            'Authorization': `Basic ${auth}`,
-                            'Content-Type': 'application/json',
-                            'x-correlation-id': crypto.randomUUID()
-                        },
-                        body: JSON.stringify({
-                            model: config.modelName,
-                            messages: messages,
-                            temperature: parseFloat(config.temperature),
-                            max_tokens: parseInt(config.maxTokens),
-                            stream: true
-                        }),
+                    const response = await requestChatCompletion({
+                        config,
+                        messages,
                         signal: abortController.signal
                     });
 
@@ -1533,8 +1574,10 @@ Need help? Contact your Dell IT administrator.`;
                 }
             }
 
-            elements.langButtons.forEach(btn => {
-                btn.addEventListener('click', () => setActiveLanguageButton(btn.dataset.value));
+            elements.languageButtonsContainer.addEventListener('click', (event) => {
+                const button = event.target.closest('.pill');
+                if (!button || !elements.languageButtonsContainer.contains(button)) return;
+                setActiveLanguageButton(button.dataset.value);
             });
 
             elements.clearInputButton.addEventListener('click', () => {
