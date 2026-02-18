@@ -1,0 +1,1578 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>AI-Translator from Ask.Dell</title>
+    <meta name="google" content="notranslate">
+    <link rel="preconnect" href="https://aia.gateway.dell.com" crossorigin>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ccircle cx='50' cy='50' r='50' fill='%230071e3'/%3E%3Ctext x='50' y='55' font-family='-apple-system, sans-serif' font-size='60' font-weight='bold' fill='%23ffffff' text-anchor='middle' dominant-baseline='middle'%3E译%3C/text%3E%3C/svg%3E">
+    <script>
+        (function() {
+            try {
+                const savedTheme = localStorage.getItem('theme') || 'light';
+                document.documentElement.setAttribute('data-theme', savedTheme);
+            } catch (e) {}
+        })();
+    </script>
+    <style>
+        :root {
+            --font-stack: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            --radius-lg: 12px;
+            --radius-sm: 8px;
+            --radius-pill: 100px;
+            --header-height: 56px;
+            --spacing-xs: 4px;
+            --spacing-sm: 8px;
+            --spacing-md: 16px;
+            --spacing-lg: 24px;
+            --ease: cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        [data-theme="light"] {
+            --bg-body: #f0f7ff;
+            --bg-secondary: #e3f2fd;
+            --bg-secondary-rgb: 227, 242, 253;
+            --bg-tertiary: #bbdefb;
+            --text-primary: #01426a;
+            --text-secondary: #0277bd;
+            --accent-color: #007db8;
+            --accent-color-rgb: 0, 125, 184;
+            --accent-text: #ffffff;
+            --divider: #90caf9;
+            --modal-bg: rgba(240, 247, 255, 0.95);
+        }
+
+        [data-theme="dark"] {
+            --bg-body: #000000;
+            --bg-secondary: #1c1c1e;
+            --bg-secondary-rgb: 28, 28, 30;
+            --bg-tertiary: #2c2c2e;
+            --text-primary: #ffffff;
+            --text-secondary: #98989d;
+            --accent-color: #0a84ff;
+            --accent-color-rgb: 10, 132, 255;
+            --accent-text: #ffffff;
+            --divider: #38383a;
+            --modal-bg: rgba(28, 28, 30, 0.95);
+        }
+
+        [data-theme="purple"] {
+            --bg-body: #faf5ff;
+            --bg-secondary: #f3e8ff;
+            --bg-secondary-rgb: 243, 232, 255;
+            --bg-tertiary: #e9d5ff;
+            --text-primary: #3b0764;
+            --text-secondary: #7e22ce;
+            --accent-color: #9333ea;
+            --accent-color-rgb: 147, 51, 234;
+            --accent-text: #ffffff;
+            --divider: #d8b4fe;
+            --modal-bg: rgba(250, 245, 255, 0.95);
+        }
+
+        [data-theme="colorful"] {
+            --bg-body: #ffffff;
+            --bg-secondary: #f8fafc;
+            --bg-secondary-rgb: 248, 250, 252;
+            --bg-tertiary: #e2e8f0;
+            --text-primary: #1e293b;
+            --text-secondary: #64748b;
+            --accent-color: #667eea;
+            --accent-color-rgb: 102, 126, 234;
+            --accent-text: #ffffff;
+            --divider: rgba(203, 213, 225, 0.5);
+            --modal-bg: rgba(248, 250, 252, 0.95);
+        }
+
+        [data-theme="colorful"] body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+        }
+
+        [data-theme="colorful"] header {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            border-bottom: 0.5px solid rgba(203, 213, 225, 0.4);
+        }
+
+        [data-theme="colorful"] .panel-input {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(12px);
+        }
+
+        [data-theme="colorful"] .panel-output {
+            background: rgba(248, 250, 252, 0.7);
+            backdrop-filter: blur(12px);
+        }
+
+        [data-theme="colorful"] .controls-bar {
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(12px);
+            border-top: 0.5px solid rgba(203, 213, 225, 0.4);
+        }
+
+        [data-theme="colorful"] .pill {
+            background: rgba(102, 126, 234, 0.15);
+            color: #667eea;
+            font-weight: 600;
+            border: 1px solid rgba(102, 126, 234, 0.3);
+        }
+
+        [data-theme="colorful"] .pill:hover {
+            background: rgba(102, 126, 234, 0.25);
+            transform: translateY(-1px);
+        }
+
+        [data-theme="colorful"] .pill[data-active="true"] {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #ffffff;
+            border: none;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+
+        [data-theme="colorful"] .progress-fill {
+            background: linear-gradient(90deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+        }
+
+        [data-theme="colorful"] .message.user .content {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #ffffff;
+            box-shadow: 0 3px 10px rgba(102, 126, 234, 0.25);
+        }
+
+        [data-theme="colorful"] .resize-handle {
+            background: rgba(255, 255, 255, 0.5);
+        }
+
+        [data-theme="colorful"] .resize-line {
+            background: linear-gradient(90deg, #667eea, #764ba2, #f093fb);
+        }
+
+        [data-theme="colorful"] .modal-content {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+        }
+
+        [data-theme="colorful"] .tool-btn:hover {
+            background: rgba(102, 126, 234, 0.15);
+            color: #667eea;
+        }
+        
+        * { 
+            box-sizing: border-box; 
+            -webkit-font-smoothing: antialiased;
+        }
+
+        body {
+            margin: 0; 
+            padding: 0;
+            font-family: var(--font-stack);
+            background: var(--bg-body);
+            color: var(--text-primary);
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--divider);
+            border-radius: 3px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--text-secondary);
+        }
+
+        header {
+            height: var(--header-height);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 var(--spacing-md);
+            background: var(--bg-body);
+            flex-shrink: 0;
+            z-index: 10;
+            border-bottom: 0.5px solid var(--divider);
+        }
+
+        .header-title {
+            font-size: 15px;
+            font-weight: 600;
+            letter-spacing: -0.02em;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            flex-shrink: 0;
+        }
+
+        .theme-dots { 
+            display: flex; 
+            gap: 7px;  
+        }
+
+        .theme-dot {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            cursor: pointer;
+            border: 1.5px solid transparent;
+            transition: all 0.2s var(--ease);
+            opacity: 0.5;  
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
+        }
+
+        .theme-dot:hover { 
+            opacity: 1;
+            transform: scale(1.2);
+        }
+
+        .theme-dot:active { 
+            transform: scale(0.9); 
+        }
+
+        .theme-dot.active {
+            border-color: var(--accent-color);
+            opacity: 1;
+            box-shadow: 0 0 0 2px rgba(var(--accent-color-rgb), 0.15);
+        }
+
+        .theme-dot[data-theme="light"] { 
+            background: #007db8; 
+        }
+
+        .theme-dot[data-theme="dark"] { 
+            background: #333; 
+        }
+
+        .theme-dot[data-theme="purple"] { 
+            background: #9333ea; 
+        }
+
+        .theme-dot[data-theme="colorful"] { 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%); 
+        }
+
+        .icon-btn {
+            background: none; 
+            border: none; 
+            padding: 4px;
+            cursor: pointer; 
+            color: var(--accent-color);
+            display: flex; 
+            align-items: center; 
+            justify-content: center;
+            border-radius: 50%;
+            transition: background 0.2s;
+        }
+
+        .icon-btn:hover { 
+            background: var(--bg-secondary); 
+        }
+
+        .icon-btn svg { 
+            width: 18px; 
+            height: 18px; 
+            fill: currentColor;
+            opacity: 0.6;
+            transition: opacity 0.2s;
+        }
+
+        .icon-btn:hover svg {
+            opacity: 1;
+        }
+
+        main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .panel {
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            min-height: 100px;
+            padding: 12px 16px;
+            transition: background 0.3s;
+            
+            will-change: flex;
+        }
+
+        .panel-input { 
+            background: var(--bg-body); 
+            flex: 1 1 30%;
+        }
+
+        .panel-output { 
+            background: var(--bg-secondary); 
+            border-top: 0.5px solid var(--divider);
+            flex: 1 1 70%;
+        }
+
+        textarea {
+            width: 100%; 
+            height: 100%;
+            border: none; 
+            resize: none;
+            background: transparent;
+            font-family: var(--font-stack);
+            font-size: 16px;
+            line-height: 1.5;
+            color: var(--text-primary);
+            padding: 0;
+        }
+
+        textarea:focus { 
+            outline: none; 
+        }
+
+        textarea::placeholder { 
+            color: var(--text-secondary); 
+        }
+
+        .chat-container {
+            width: 100%;
+            height: 100%;
+            overflow-y: auto;
+            padding-right: 8px;
+            
+            contain: layout style paint;
+            
+            scroll-behavior: smooth;
+        }
+
+        .chat-mode-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 13px;
+            color: var(--text-secondary);
+            padding: 4px 10px;
+            background: var(--bg-tertiary);
+            border-radius: 12px;
+            margin-bottom: 12px;
+            font-weight: 500;
+        }
+
+        .message {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 16px;
+            align-items: flex-start;
+            
+            contain: layout style;
+        }
+
+        .message.user {
+            flex-direction: row-reverse;
+        }
+
+        .message .avatar {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            flex-shrink: 0;
+            border-radius: 50%;
+            background: var(--bg-tertiary);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .message .content {
+            padding: 10px 14px;
+            border-radius: 18px;
+            font-size: 15px;
+            line-height: 1.47;
+            max-width: 85%;
+            word-wrap: break-word;
+            white-space: pre-wrap;
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        }
+
+        .message.user .content {
+            background: var(--accent-color);
+            color: var(--accent-text);
+            border-bottom-right-radius: 4px;
+            box-shadow: 0 2px 8px rgba(var(--accent-color-rgb), 0.25);
+        }
+
+        .message.assistant .content {
+            background: var(--bg-body);
+            color: var(--text-primary);
+            border-bottom-left-radius: 4px;
+            border: 1px solid var(--divider);
+        }
+
+        .panel-tools {
+            position: absolute;
+            bottom: 12px; 
+            right: 24px;
+            z-index: 5;
+            display: flex;
+            gap: 8px;
+        }
+
+        .tool-btn {
+            font-size: 13px;
+            font-weight: 500;
+            padding: 7px 14px;
+            background: transparent;
+            color: var(--text-secondary);
+            border-radius: 100px;
+            border: none;
+            cursor: pointer;
+            backdrop-filter: none;
+            opacity: 0;
+            transition: all 0.25s var(--ease);
+            pointer-events: auto;
+        }
+
+        .panel:hover .tool-btn {
+            opacity: 0.6;
+        }
+
+        .tool-btn:hover { 
+            opacity: 1;
+            background: var(--bg-tertiary);
+            backdrop-filter: blur(8px);
+            color: var(--text-primary);
+            transform: translateY(-1px);
+        }
+
+        .tool-btn:active {
+            transform: scale(0.96) translateY(0);
+        }
+
+        .controls-bar {
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: var(--spacing-sm) var(--spacing-md);
+            background: var(--bg-body);
+            z-index: 5;
+            gap: var(--spacing-sm);
+            border-top: 0.5px solid var(--divider);
+        }
+
+        .pill-scroll {
+            display: flex;
+            gap: 5px;
+            width: 100%;
+            justify-content: space-between;
+        }
+
+        .pill {
+            flex: 1;
+            padding: 8px 0;
+            font-size: 12px;
+            font-weight: 500;
+            border-radius: 8px;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            border: none;
+            cursor: pointer;
+            transition: all 0.2s var(--ease);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            white-space: nowrap;
+        }
+
+        .pill:hover { 
+            background: var(--bg-tertiary); 
+            transform: translateY(-1px);
+        }
+
+        .pill[data-active="true"] {
+            background: var(--accent-color);
+            color: var(--accent-text);
+            box-shadow: 0 2px 8px rgba(var(--accent-color-rgb), 0.2);
+            transform: scale(1.02);
+        }
+
+        .progress-line {
+            height: 3px;
+            width: 100%;
+            background: var(--bg-secondary);
+            border-radius: 2px;
+            overflow: hidden;
+            margin-top: 2px;
+        }
+
+        .progress-fill {
+            height: 100%; 
+            width: 0%;
+            background: var(--accent-color);
+            transition: width 0.3s ease;
+            
+            will-change: width;
+        }
+
+        .resize-handle {
+            height: 8px;
+            background: var(--bg-body);
+            cursor: row-resize;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            margin-top: -1px;
+            position: relative;
+            z-index: 20;
+            transition: background 0.2s;
+        }
+
+        .resize-handle:hover { 
+            background: var(--bg-secondary); 
+        }
+
+        .resize-handle:active {
+            background: var(--accent-color);
+        }
+
+        .resize-line {
+            width: 40px;
+            height: 4px;
+            background: var(--divider);
+            border-radius: 2px;
+            transition: all 0.2s;
+        }
+
+        .resize-handle:hover .resize-line {
+            width: 48px;
+            background: var(--accent-color);
+        }
+
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.4);
+            backdrop-filter: blur(10px);
+            z-index: 100;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s var(--ease);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .modal-content {
+            background: var(--modal-bg);
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            transform: translateY(100%);
+            transition: transform 0.35s var(--ease);
+            overflow: hidden;
+            box-shadow: 0 -4px 24px rgba(0, 0, 0, 0.15);
+        }
+        
+        .modal-overlay.active .modal-content {
+            transform: translateY(0);
+        }
+
+        .modal-header {
+            height: 56px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 16px;
+            border-bottom: 0.5px solid var(--divider);
+            flex-shrink: 0;
+        }
+        
+        .modal-title { 
+            font-size: 17px; 
+            font-weight: 600; 
+        }
+
+        .modal-done { 
+            font-size: 17px; 
+            font-weight: 600; 
+            color: var(--accent-color); 
+            background: none; 
+            border: none; 
+            cursor: pointer; 
+        }
+
+        .modal-body {
+            padding: 20px 16px;
+            overflow-y: auto;
+            background: var(--bg-secondary); 
+            flex: 1;
+        }
+
+        .form-group {
+            background: var(--bg-body);
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 24px;
+            box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+        }
+
+        .form-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 16px;
+            border-bottom: 0.5px solid var(--divider);
+        }
+
+        .form-item:last-child { 
+            border-bottom: none; 
+        }
+
+        .form-item label {
+            flex: 1;
+            font-size: 16px;
+            color: var(--text-primary);
+        }
+
+        .form-item input {
+            flex: 1;
+            text-align: right;
+            border: none;
+            background: transparent;
+            font-size: 16px;
+            color: var(--text-secondary);
+            font-family: inherit;
+        }
+
+        .form-item input:focus { 
+            outline: none; 
+            color: var(--accent-color); 
+        }
+
+        .form-item input::placeholder { 
+            color: var(--text-secondary); 
+            opacity: 0.5; 
+        }
+
+        .form-note {
+            font-size: 13px;
+            color: var(--text-secondary);
+            margin-top: -16px;
+            margin-bottom: 24px;
+            padding: 0 16px;
+        }
+
+        .btn-full {
+            width: 100%;
+            padding: 14px;
+            background: var(--bg-body);
+            color: var(--accent-color);
+            font-size: 17px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            margin-bottom: 12px;
+            font-weight: 500;
+        }
+
+        .btn-full.danger { 
+            color: #ff3b30; 
+        }
+
+        .btn-full:active { 
+            background: var(--bg-tertiary); 
+        }
+
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="header-title">AI-Translator v2.5 - Dell internal</div>
+        <div class="header-actions">
+            <div class="theme-dots">
+                <div class="theme-dot" data-theme="light" title="Light"></div>
+                <div class="theme-dot" data-theme="dark" title="Dark"></div>
+                <div class="theme-dot" data-theme="purple" title="Purple"></div>
+                <div class="theme-dot" data-theme="colorful" title="Colorful"></div>
+            </div>
+            <div style="width: 1px; height: 16px; background: var(--divider); margin: 0 4px;"></div>
+            <button class="icon-btn" id="openSettingsBtn" title="Settings">
+                <svg viewBox="0 0 24 24"><path d="M19.14,12.94c0.04-0.3,0.06-0.61,0.06-0.94c0-0.32-0.02-0.64-0.07-0.94l2.03-1.58c0.18-0.14,0.23-0.41,0.12-0.61 l-1.92-3.32c-0.12-0.22-0.37-0.29-0.59-0.22l-2.39,0.96c-0.5-0.38-1.03-0.7-1.62-0.94L14.4,2.81c-0.04-0.24-0.24-0.41-0.48-0.41 h-3.84c-0.24,0-0.43,0.17-0.47,0.41L9.25,5.35C8.66,5.59,8.12,5.92,7.63,6.29L5.24,5.33c-0.22-0.08-0.47,0-0.59,0.22L2.74,8.87 C2.62,9.08,2.66,9.34,2.86,9.48l2.03,1.58C4.84,11.36,4.8,11.69,4.8,12s0.02,0.64,0.07,0.94l-2.03,1.58 c-0.18,0.14-0.23,0.41-0.12,0.61l1.92,3.32c0.12,0.22,0.37,0.29,0.59,0.22l2.39-0.96c0.5,0.38,1.03,0.7,1.62,0.94l0.36,2.54 c0.05,0.24,0.24,0.41,0.48,0.41h3.84c0.24,0,0.44-0.17,0.47-0.41l0.36-2.54c0.59-0.24,1.13-0.56,1.62-0.94l2.39,0.96 c0.22,0.08,0.47,0,0.59-0.22l1.92-3.32c0.12-0.22,0.07-0.47-0.12-0.61L19.14,12.94z M12,15.6c-1.98,0-3.6-1.62-3.6-3.6 s1.62-3.6,3.6-3.6s3.6,1.62,3.6,3.6S13.98,15.6,12,15.6z"/></svg>
+            </button>
+        </div>
+    </header>
+
+    <main>
+        <div class="panel panel-input" id="inputPanel">
+            <textarea id="inputText" placeholder="Enter text to translate..."></textarea>
+            <div class="panel-tools">
+                <button id="clearInputButton" class="tool-btn">Clear</button>
+            </div>
+        </div>
+
+        <div class="controls-bar">
+            <div class="pill-scroll" id="languageButtonsContainer">
+                <button class="pill" data-value="<2zh>">To 中文</button>
+                <button class="pill" data-value="<2en>">To 英文</button>
+                <button class="pill" data-value="polish_text">润色修正</button>
+                <button class="pill" data-value="dictionary_text">词&nbsp;&nbsp;典</button>
+                <button class="pill" data-value="chat">Ask.DELL</button>
+            </div>
+            <div class="progress-line"><div id="progressBarFill" class="progress-fill"></div></div>
+        </div>
+
+        <div class="resize-handle" id="resizeHandle">
+            <div class="resize-line"></div>
+        </div>
+
+        <div class="panel panel-output" id="outputPanel">
+            <textarea id="resultText" placeholder="Translation..." readonly></textarea>
+            <div id="chatContainer" class="chat-container hidden"></div>
+
+            <button id="scrollToBottomBtn" class="scroll-to-bottom-btn hidden">
+                <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                    <path d="M8 12L3 7h10l-5 5z"/>
+                </svg>
+                <span>新消息</span>
+            </button>
+            
+            <div class="panel-tools">
+                <button id="newChatButton" class="tool-btn hidden">New Chat</button>
+                <button id="copyOutputButton" class="tool-btn">Copy</button>
+            </div>
+        </div>
+    </main>
+
+    <div id="settingsModal" class="modal-overlay">
+        <div class="modal-content">
+            <div class="modal-header">
+                <div class="modal-title">Settings</div>
+                <button class="modal-done" id="closeSettingsBtn">Done</button>
+            </div>
+            <div class="modal-body">
+                <div class="form-note">API Keys are stored locally on your device.</div>
+
+                <div class="form-group">
+                    <div class="form-item">
+                        <label>Client ID</label>
+                        <input type="text" id="clientIdInput" placeholder="Required">
+                    </div>
+                    <div class="form-item">
+                        <label>Client Secret</label>
+                        <input type="password" id="clientSecretInput" placeholder="Required">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="form-item">
+                        <label>Model</label>
+                        <input type="text" id="modelNameInput" placeholder="gpt-oss-120b">
+                    </div>
+                    <div class="form-item">
+                        <label>Temperature</label>
+                        <input type="number" id="temperatureInput" step="0.1" placeholder="0.3">
+                    </div>
+                    <div class="form-item">
+                        <label>Max Tokens</label>
+                        <input type="number" id="maxTokensInput" placeholder="2048">
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <div class="form-item">
+                        <label>Chat History Limit</label>
+                        <input type="number" id="chatHistoryLimitInput" min="5" max="100" placeholder="20">
+                    </div>
+                </div>
+                <div class="form-note">Maximum number of chat messages to keep (5-100). Default: 20</div>
+
+                <button class="btn-full" id="saveSettingsButton">Save Configuration</button>
+                <button class="btn-full danger" id="restoreDefaultsButton">Reset to Defaults</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', async () => {
+            'use strict';
+
+            const elements = {
+                inputPanel: document.getElementById('inputPanel'),
+                outputPanel: document.getElementById('outputPanel'),
+                resizeHandle: document.getElementById('resizeHandle'),
+                inputTextarea: document.getElementById('inputText'),
+                resultTextarea: document.getElementById('resultText'),
+                chatContainer: document.getElementById('chatContainer'),
+                progressBarFill: document.getElementById('progressBarFill'),
+                langButtons: Array.from(document.querySelectorAll('.pill')),
+                clearInputButton: document.getElementById('clearInputButton'),
+                copyOutputButton: document.getElementById('copyOutputButton'),
+                newChatButton: document.getElementById('newChatButton'),
+                openSettingsBtn: document.getElementById('openSettingsBtn'),
+                closeSettingsBtn: document.getElementById('closeSettingsBtn'),
+                settingsModal: document.getElementById('settingsModal'),
+                clientIdInput: document.getElementById('clientIdInput'),
+                clientSecretInput: document.getElementById('clientSecretInput'),
+                modelNameInput: document.getElementById('modelNameInput'),
+                temperatureInput: document.getElementById('temperatureInput'),
+                maxTokensInput: document.getElementById('maxTokensInput'),
+                chatHistoryLimitInput: document.getElementById('chatHistoryLimitInput'),
+                saveSettingsButton: document.getElementById('saveSettingsButton'),
+                restoreDefaultsButton: document.getElementById('restoreDefaultsButton'),
+                themeDots: Array.from(document.querySelectorAll('.theme-dot')),
+            };
+
+            let selectedLanguageValue = '';
+            let abortController = null;
+            let chatHistory = [];
+            let manuallyResized = false;
+
+            let cachedSettings = null;
+
+            const BASE_URL = 'https://aia.gateway.dell.com/genai/dev/v1';
+            const DEFAULTS = {
+                modelName: 'gpt-oss-120b',
+                clientId: '',
+                clientSecret: '',
+                temperature: 0.3,
+                maxTokens: 2048,
+                chatHistoryLimit: 20,
+                lastLang: '<2zh>'
+            };
+
+            const PROMPTS = {
+                TRANSLATE_ZH: `You are a professional translation expert specializing in English-to-Chinese translation.
+
+**Task:** Translate the following text into natural, fluent Chinese.
+
+**Requirements:**
+1. Preserve the exact meaning, tone, and nuance of the source text
+2. Maintain all original formatting (line breaks, lists, markdown)
+3. Use the most widely accepted official translations for technical terms
+4. For proper nouns without established translations, use transliteration followed by the English term in parentheses
+5. Output ONLY the translated Chinese text
+6. Do NOT add any explanations, comments, or quotation marks
+
+Translate the text below:`,
+
+                TRANSLATE_EN: `You are a professional translation expert specializing in Chinese-to-English translation.
+
+**Task:** Translate the following text into natural, fluent English.
+
+**Requirements:**
+1. Preserve the exact meaning, tone, and nuance of the source text
+2. Maintain all original formatting (line breaks, lists, markdown)
+3. Use the most widely accepted official translations for technical terms
+4. Output ONLY the translated English text
+5. Do NOT add any explanations, comments, or quotation marks
+
+Translate the text below:`,
+
+                POLISH: `你是一位专业的语言编辑与双语审校专家,擅长在不改变原意的前提下对文本进行高质量润色与校正。
+
+**任务:**对用户提供的文本进行润色,并按照以下格式输出。
+
+**核心原则:**
+- 自动识别文本的主要语言(英文或中文)
+- 使用与原文**相同的语言**进行润色
+- 严格保持原文的含义、语气、立场和事实
+- 不新增、删减或歪曲原文信息
+
+**润色要求:**
+1. 修正语法、拼写和标点错误
+2. 优化词汇选择,使表达更自然、地道、准确
+3. 必要时调整句式结构,提升流畅度与可读性
+4. 保持原有风格(正式/中性/口语),不刻意拔高或降级语气
+
+**输出格式(严格遵守):**
+
+✅ 润色后文本:
+<润色结果(原语言)>
+
+📖 中文翻译:
+<完整中文翻译(忠实原意,自然表达)>
+
+🔧 修改说明:
+1. <修改内容> - <修改原因>
+2. <修改内容> - <修改原因>
+...
+
+**注意:**
+- 不得添加任何步骤说明、分析标题或过程性文字
+- 修改说明必须用中文,逐条列出关键修改
+- 如果原文已经很完美,修改说明可写"无需修改"`,
+
+                DICT: `你是一个博学的中英双语词典机器人,擅长词源分析和语言教学。
+
+**任务:**对用户输入的单词或短语提供全面的词典信息。
+
+**输出格式(严格遵守):**
+
+📝 **正确写法:** <修正后的拼写>
+🔊 **音标:** <IPA国际音标>
+📚 **词性:** <主要词性,如 n. / v. / adj. / adv.>
+
+🇨🇳 **中文释义:**
+- <最常用的核心释义1>
+- <核心释义2(如有)>
+
+🇬🇧 **英文释义:**
+<最核心的英文定义>
+
+🧬 **词根词缀分析:**
+- <前缀>:<含义>
+- <词根>:<含义>
+- <后缀>:<含义>
+(如无明显词根词缀,注明"无明显词根词缀结构")
+
+💡 **词源小结:**
+<一句话概括该词的核心含义或词源特点>
+
+📖 **例句:**
+1. <英文例句> 
+   → <中文翻译>
+2. <英文例句>
+   → <中文翻译>
+
+请开始处理用户输入。`,
+
+                CHAT: `You are Ask.Dell, an internal AI assistant for Dell Technologies employees.
+
+**Guidelines:**
+- Be direct and concise - answer the question without unnecessary elaboration
+- For simple questions: Give 1-2 sentence answers
+- For complex topics: Use brief bullet points only when essential
+- Avoid excessive formatting, lengthy introductions, or enthusiastic language
+- State limitations clearly if you don't have current Dell information
+
+**Knowledge Boundaries:**
+- Dell policies/products: Direct to dell.com or internal portals when uncertain
+- HR/compensation: "Please discuss with your manager or HR"
+- Confidential/unreleased: "I don't have information on that"
+
+**Restrictions:**
+- Never fabricate Dell internal data
+- Never provide legal/HR advice
+- No speculation about sensitive topics
+
+Answer questions directly and professionally.`
+            };
+
+            const PLACEHOLDERS = {
+                '<2zh>': 'Please Enter English text...',
+                '<2en>': '请输入中文文本...',
+                'polish_text': 'Paste text to polish...',
+                'dictionary_text': 'Enter a word or phrase...',
+                'chat': 'Ask me anything about Dell...'
+            };
+
+            function getSettings() {
+                if (!cachedSettings) {
+                    const saved = JSON.parse(localStorage.getItem('AiTransatorSettings_v3') || '{}');
+                    cachedSettings = { ...DEFAULTS, ...saved };
+                }
+                return cachedSettings;
+            }
+            
+            function invalidateSettingsCache() {
+                cachedSettings = null;
+            }
+
+            function showInlineSetupGuide() {
+                if (selectedLanguageValue === 'chat') {
+                    elements.chatContainer.innerHTML = `
+                        <div style="padding: 24px; text-align: center; color: var(--text-secondary);">
+                            <div style="font-size: 48px; margin-bottom: 16px;">⚙️</div>
+                            <h3 style="margin: 0 0 12px 0; color: var(--text-primary);">Setup Required</h3>
+                            <p style="margin: 0 0 20px 0; line-height: 1.6;">
+                                Please configure your API credentials to start using the translator.
+                            </p>
+                            <button onclick="document.getElementById('openSettingsBtn').click()" style="
+                                padding: 10px 24px;
+                                background: var(--accent-color);
+                                color: white;
+                                border: none;
+                                border-radius: 8px;
+                                cursor: pointer;
+                                font-size: 15px;
+                                font-weight: 500;
+                            ">Open Settings</button>
+                        </div>
+                    `;
+                } else {
+                    elements.resultTextarea.value = `⚠️ Setup Required
+
+Please configure your API credentials:
+
+1. Click the Settings icon (⚙️) in the top-right corner
+2. Enter your Client ID and Client Secret
+3. Click "Save Configuration"
+4. Try translating again
+
+Need help? Contact your Dell IT administrator.`;
+                }
+            }
+
+            function switchToTranslateMode() {
+                elements.resultTextarea.classList.remove('hidden');
+                elements.chatContainer.classList.add('hidden');
+                elements.newChatButton.classList.add('hidden');
+                updatePlaceholder();
+            }
+
+            function switchToChatMode() {
+                elements.resultTextarea.classList.add('hidden');
+                elements.chatContainer.classList.remove('hidden');
+                elements.newChatButton.classList.remove('hidden');
+                updatePlaceholder();
+                renderChatHistory();
+            }
+
+            function updatePlaceholder() {
+                elements.inputTextarea.placeholder = PLACEHOLDERS[selectedLanguageValue] || 'Enter text...';
+            }
+
+            function renderChatHistory() {
+                if (chatHistory.length === 0) {
+                    elements.chatContainer.innerHTML = '<div class="chat-mode-indicator">💬 Conversation Mode</div>';
+                    return;
+                }
+
+                const fragment = document.createDocumentFragment();
+                
+                const indicator = document.createElement('div');
+                indicator.className = 'chat-mode-indicator';
+                indicator.textContent = '💬 Conversation Mode';
+                fragment.appendChild(indicator);
+                
+                chatHistory.forEach((msg) => {
+                    const messageDiv = document.createElement('div');
+                    messageDiv.className = `message ${msg.role === 'user' ? 'user' : 'assistant'}`;
+                    
+                    const avatar = document.createElement('div');
+                    avatar.className = 'avatar';
+                    avatar.textContent = msg.role === 'user' ? '👤' : '🤖';
+                    
+                    const content = document.createElement('div');
+                    content.className = 'content';
+                    content.textContent = msg.content;
+                    
+                    messageDiv.appendChild(avatar);
+                    messageDiv.appendChild(content);
+                    fragment.appendChild(messageDiv);
+                });
+
+                elements.chatContainer.innerHTML = '';
+                elements.chatContainer.appendChild(fragment);
+
+                userIsAtBottom = true;
+                elements.chatContainer.scrollTop = elements.chatContainer.scrollHeight;
+            }
+
+            let streamUpdateScheduled = false;
+            let pendingStreamContent = '';
+            
+            function appendStreamingMessage(content, isFinal = false) {
+                pendingStreamContent = content;
+                
+                if (!streamUpdateScheduled) {
+                    streamUpdateScheduled = true;
+                    requestAnimationFrame(() => {
+                        const existingStreaming = elements.chatContainer.querySelector('.message.assistant.streaming');
+                        
+                        if (!existingStreaming) {
+                            const messageDiv = document.createElement('div');
+                            messageDiv.className = 'message assistant streaming';
+                            
+                            const avatar = document.createElement('div');
+                            avatar.className = 'avatar';
+                            avatar.textContent = '🤖';
+                            
+                            const contentDiv = document.createElement('div');
+                            contentDiv.className = 'content';
+                            contentDiv.textContent = pendingStreamContent;
+                            
+                            messageDiv.appendChild(avatar);
+                            messageDiv.appendChild(contentDiv);
+                            elements.chatContainer.appendChild(messageDiv);
+                        } else {
+                            const contentDiv = existingStreaming.querySelector('.content');
+                            contentDiv.textContent = pendingStreamContent;
+                        }
+
+                        if (isFinal) {
+                            existingStreaming?.classList.remove('streaming');
+                        }
+
+                        scrollChatToBottom();
+                        streamUpdateScheduled = false;
+                    });
+                }
+            }
+
+            let userIsAtBottom = true;
+            
+            function isAtBottom() {
+                const threshold = 50;
+                const scrollBottom = elements.chatContainer.scrollHeight - 
+                                   elements.chatContainer.scrollTop - 
+                                   elements.chatContainer.clientHeight;
+                return scrollBottom <= threshold;
+            }
+            
+            function scrollChatToBottom() {
+
+                if (userIsAtBottom) {
+                    elements.chatContainer.scrollTop = elements.chatContainer.scrollHeight;
+                }
+            }
+
+            elements.chatContainer.addEventListener('scroll', () => {
+                userIsAtBottom = isAtBottom();
+            });
+
+            function escapeHtml(text) {
+                const div = document.createElement('div');
+                div.textContent = text;
+                return div.innerHTML;
+            }
+
+            function clearChat() {
+                chatHistory = [];
+                renderChatHistory();
+                elements.inputTextarea.value = '';
+                elements.inputTextarea.focus();
+                userIsAtBottom = true;
+            }
+
+            function trimChatHistory() {
+                const settings = getSettings();
+                const limit = parseInt(settings.chatHistoryLimit) || DEFAULTS.chatHistoryLimit;
+                
+                if (chatHistory.length > limit) {
+                    chatHistory = chatHistory.slice(-limit);
+                }
+            }
+
+            function switchTheme(theme) {
+                document.documentElement.setAttribute('data-theme', theme);
+                localStorage.setItem('theme', theme);
+                
+                elements.themeDots.forEach(dot => {
+                    if (dot.dataset.theme === theme) {
+                        dot.classList.add('active');
+                    } else {
+                        dot.classList.remove('active');
+                    }
+                });
+            }
+            
+            elements.themeDots.forEach(dot => {
+                dot.addEventListener('click', () => switchTheme(dot.dataset.theme));
+            });
+
+            function toggleModal(show) {
+                if (show) {
+                    elements.settingsModal.classList.add('active');
+                } else {
+                    elements.settingsModal.classList.remove('active');
+                }
+            }
+            
+            elements.openSettingsBtn.addEventListener('click', () => {
+                loadSettings();
+                toggleModal(true);
+            });
+            elements.closeSettingsBtn.addEventListener('click', () => toggleModal(false));
+            
+            async function saveSettings() {
+                const settings = {
+                    clientId: elements.clientIdInput.value.trim(),
+                    clientSecret: elements.clientSecretInput.value.trim(),
+                    modelName: elements.modelNameInput.value.trim() || DEFAULTS.modelName,
+                    temperature: elements.temperatureInput.value || DEFAULTS.temperature,
+                    maxTokens: elements.maxTokensInput.value || DEFAULTS.maxTokens,
+                    chatHistoryLimit: parseInt(elements.chatHistoryLimitInput.value) || DEFAULTS.chatHistoryLimit,
+                };
+                
+                if (settings.chatHistoryLimit < 5) settings.chatHistoryLimit = 5;
+                if (settings.chatHistoryLimit > 100) settings.chatHistoryLimit = 100;
+                
+                localStorage.setItem('AiTransatorSettings_v3', JSON.stringify(settings));
+                invalidateSettingsCache();
+                
+                trimChatHistory();
+                if (selectedLanguageValue === 'chat') {
+                    renderChatHistory();
+                }
+                
+                const originalText = elements.saveSettingsButton.textContent;
+                elements.saveSettingsButton.textContent = 'Saved!';
+                setTimeout(() => {
+                    elements.saveSettingsButton.textContent = originalText;
+                    toggleModal(false);
+                }, 600);
+            }
+
+            function loadSettings() {
+                const data = getSettings();
+                
+                elements.clientIdInput.value = data.clientId;
+                elements.clientSecretInput.value = data.clientSecret;
+                elements.modelNameInput.value = data.modelName;
+                elements.temperatureInput.value = data.temperature;
+                elements.maxTokensInput.value = data.maxTokens;
+                elements.chatHistoryLimitInput.value = data.chatHistoryLimit;
+                
+                if (!selectedLanguageValue) {
+                    setActiveLanguageButton(data.lastLang || DEFAULTS.lastLang, true);
+                }
+            }
+
+            function restoreDefaultSettings() {
+                if(confirm('Reset all settings to default?')) {
+                    localStorage.removeItem('AiTransatorSettings_v3');
+                    invalidateSettingsCache();
+                    loadSettings();
+                }
+            }
+            
+            elements.saveSettingsButton.addEventListener('click', saveSettings);
+            elements.restoreDefaultsButton.addEventListener('click', restoreDefaultSettings);
+
+            let isResizing = false;
+            let startY = 0;
+            let startInputHeight = 0;
+            let startOutputHeight = 0;
+
+            elements.resizeHandle.addEventListener('mousedown', (e) => {
+                isResizing = true;
+                startY = e.clientY;
+                startInputHeight = elements.inputPanel.offsetHeight;
+                startOutputHeight = elements.outputPanel.offsetHeight;
+                
+                document.body.style.cursor = 'row-resize';
+                elements.resizeHandle.style.background = 'var(--accent-color)';
+            });
+
+            document.addEventListener('mousemove', (e) => {
+                if (!isResizing) return;
+                
+                requestAnimationFrame(() => {
+                    const deltaY = e.clientY - startY;
+                    const totalHeight = startInputHeight + startOutputHeight;
+                    
+                    let newInputHeight = startInputHeight + deltaY;
+                    let newOutputHeight = startOutputHeight - deltaY;
+
+                    if (newInputHeight < 80) {
+                        newInputHeight = 80;
+                        newOutputHeight = totalHeight - 80;
+                    }
+                    if (newOutputHeight < 80) {
+                        newOutputHeight = 80;
+                        newInputHeight = totalHeight - 80;
+                    }
+
+                    const totalHeightPx = totalHeight;
+                    const inputPercent = (newInputHeight / totalHeightPx) * 100;
+                    const outputPercent = (newOutputHeight / totalHeightPx) * 100;
+
+                    elements.inputPanel.style.flex = `1 1 ${inputPercent}%`;
+                    elements.outputPanel.style.flex = `1 1 ${outputPercent}%`;
+                    
+                    manuallyResized = true;
+                });
+            });
+
+            document.addEventListener('mouseup', () => {
+                if (isResizing) {
+                    isResizing = false;
+                    document.body.style.cursor = '';
+                    elements.resizeHandle.style.background = '';
+                    
+                    if (manuallyResized) {
+                        const inputFlex = elements.inputPanel.style.flex;
+                        const outputFlex = elements.outputPanel.style.flex;
+                        localStorage.setItem('panelRatio', JSON.stringify({
+                            input: inputFlex,
+                            output: outputFlex
+                        }));
+                    }
+                }
+            });
+
+            try {
+                const savedRatio = JSON.parse(localStorage.getItem('panelRatio') || '{}');
+                if (savedRatio.input && savedRatio.output) {
+                    elements.inputPanel.style.flex = savedRatio.input;
+                    elements.outputPanel.style.flex = savedRatio.output;
+                    manuallyResized = true;
+                }
+            } catch(e){}
+
+            let resizeTimeout;
+            window.addEventListener('resize', () => {
+                if (!isResizing && !manuallyResized) {
+                    clearTimeout(resizeTimeout);
+                    resizeTimeout = setTimeout(() => {
+                        elements.inputPanel.style.flex = '1 1 30%';
+                        elements.outputPanel.style.flex = '1 1 70%';
+                    }, 150);
+                }
+            });
+
+            function buildPayload(langCode, text) {
+                if (langCode === 'chat') {
+                    return null; 
+                }
+
+                let systemContent = '';
+                const userContent = text.trim();
+
+                switch(langCode) {
+                    case '<2zh>':
+                        systemContent = PROMPTS.TRANSLATE_ZH;
+                        break;
+                    case '<2en>':
+                        systemContent = PROMPTS.TRANSLATE_EN;
+                        break;
+                    case 'polish_text':
+                        systemContent = PROMPTS.POLISH;
+                        break;
+                    case 'dictionary_text':
+                        systemContent = PROMPTS.DICT;
+                        break;
+                    default:
+                        systemContent = PROMPTS.TRANSLATE_ZH;
+                }
+
+                return {
+                    messages: [
+                        { role: 'system', content: systemContent },
+                        { role: 'user', content: userContent }
+                    ]
+                };
+            }
+
+            function buildApiUrl() {
+                return `${BASE_URL}/chat/completions`;
+            }
+
+            async function handleTranslate() {
+                const text = elements.inputTextarea.value.trim();
+                if (!text) return;
+
+                const config = getSettings();
+                
+                if (!config.clientId || !config.clientSecret) {
+                    showInlineSetupGuide();
+                    return;
+                }
+
+                if (abortController) {
+                    abortController.abort();
+                }
+                abortController = new AbortController();
+                
+                elements.langButtons.forEach(b => b.disabled = true);
+                
+                if (selectedLanguageValue === 'chat') {
+                    chatHistory.push({ role: 'user', content: text });
+                    trimChatHistory();
+                    renderChatHistory();
+                    userIsAtBottom = true;
+                } else {
+                    elements.resultTextarea.value = '';
+                }
+                
+                elements.progressBarFill.style.width = '20%';
+
+                try {
+                    const auth = btoa(`${config.clientId}:${config.clientSecret}`);
+                    
+                    let messages = [];
+                    if (selectedLanguageValue === 'chat') {
+                        messages = [
+                            { role: 'system', content: PROMPTS.CHAT },
+                            ...chatHistory
+                        ];
+                    } else {
+                        const payload = buildPayload(selectedLanguageValue, text);
+                        messages = payload.messages;
+                    }
+
+                    const response = await fetch(buildApiUrl(), {
+                        method: 'POST',
+                        headers: {
+                            'Authorization': `Basic ${auth}`,
+                            'Content-Type': 'application/json',
+                            'x-correlation-id': crypto.randomUUID()
+                        },
+                        body: JSON.stringify({
+                            model: config.modelName,
+                            messages: messages,
+                            temperature: parseFloat(config.temperature),
+                            max_tokens: parseInt(config.maxTokens),
+                            stream: true
+                        }),
+                        signal: abortController.signal
+                    });
+
+                    if (!response.ok) throw new Error(`API Error: ${response.status}`);
+
+                    elements.progressBarFill.style.width = '60%';
+                    
+                    const reader = response.body.getReader();
+                    const decoder = new TextDecoder();
+                    let fullText = '';
+
+                    let buffer = '';
+
+                    while (true) {
+                        const { done, value } = await reader.read();
+                        if (done) break;
+                        
+                        buffer += decoder.decode(value, { stream: true });
+                        const lines = buffer.split('\n');
+                        buffer = lines.pop() || '';
+                        
+                        for (const line of lines) {
+                            if (line.startsWith('data: ') && line !== 'data: [DONE]') {
+                                try {
+                                    const data = JSON.parse(line.slice(6));
+                                    const content = data.choices[0]?.delta?.content || '';
+                                    if (content) {
+                                        fullText += content;
+                                        
+                                        if (selectedLanguageValue === 'chat') {
+                                            appendStreamingMessage(fullText, false);
+                                        } else {
+                                            elements.resultTextarea.value += content;
+                                        }
+                                    }
+                                } catch (e) {
+                                    console.warn('Parse error:', e);
+                                }
+                            }
+                        }
+                    }
+
+                    if (selectedLanguageValue === 'chat') {
+                        chatHistory.push({ role: 'assistant', content: fullText });
+                        trimChatHistory();
+                        appendStreamingMessage(fullText, true);
+                        elements.inputTextarea.value = '';
+                    }
+                    
+                    elements.progressBarFill.style.width = '100%';
+
+                } catch (error) {
+                    if (error.name === 'AbortError') {
+                        console.log('Request aborted');
+                        return;
+                    }
+                    
+                    if (selectedLanguageValue === 'chat') {
+                        appendStreamingMessage(`Error: ${error.message}`, true);
+                    } else {
+                        elements.resultTextarea.value = `Error: ${error.message}`;
+                    }
+                    elements.progressBarFill.style.background = '#ff3b30';
+                } finally {
+                    elements.langButtons.forEach(b => b.disabled = false);
+                    setTimeout(() => {
+                        elements.progressBarFill.style.width = '0%';
+                        elements.progressBarFill.style.background = '';
+                    }, 1000);
+                    abortController = null;
+                }
+            }
+
+            function setActiveLanguageButton(val, skipTranslate = false) {
+                selectedLanguageValue = val;
+                elements.langButtons.forEach(b => {
+                    if (b.dataset.value === val) {
+                        b.setAttribute('data-active', 'true');
+                    } else {
+                        b.removeAttribute('data-active');
+                    }
+                });
+                
+                if (val === 'chat') {
+                    switchToChatMode();
+                } else {
+                    chatHistory = [];
+                    switchToTranslateMode();
+                }
+                
+                if (!skipTranslate && elements.inputTextarea.value.trim()) {
+                    handleTranslate();
+                }
+            }
+
+            elements.langButtons.forEach(btn => {
+                btn.addEventListener('click', () => setActiveLanguageButton(btn.dataset.value));
+            });
+
+            elements.clearInputButton.addEventListener('click', () => {
+                elements.inputTextarea.value = '';
+                elements.inputTextarea.focus();
+            });
+
+            elements.newChatButton.addEventListener('click', clearChat);
+
+            elements.copyOutputButton.addEventListener('click', () => {
+                let textToCopy = '';
+                
+                if (selectedLanguageValue === 'chat') {
+                    textToCopy = chatHistory.map(msg => {
+                        const prefix = msg.role === 'user' ? '👤 You: ' : '🤖 Dell: ';
+                        return prefix + msg.content;
+                    }).join('\n\n');
+                } else {
+                    textToCopy = elements.resultTextarea.value;
+                }
+                
+                navigator.clipboard.writeText(textToCopy);
+                const original = elements.copyOutputButton.textContent;
+                elements.copyOutputButton.textContent = 'Copied';
+                setTimeout(() => elements.copyOutputButton.textContent = original, 1000);
+            });
+
+            loadSettings();
+            
+            const currentTheme = localStorage.getItem('theme') || 'light';
+            elements.themeDots.forEach(dot => {
+                if (dot.dataset.theme === currentTheme) {
+                    dot.classList.add('active');
+                }
+            });
+            
+            elements.inputTextarea.focus();
+        });
+    </script>
+</body>
+</html>
