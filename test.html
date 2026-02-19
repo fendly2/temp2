@@ -27,6 +27,22 @@
             --spacing-md: 16px;
             --spacing-lg: 24px;
             --ease: cubic-bezier(0.4, 0, 0.2, 1);
+            --pill-bg: var(--bg-secondary);
+            --pill-color: var(--text-primary);
+            --pill-font-weight: 500;
+            --pill-border: none;
+            --pill-hover-bg: var(--bg-tertiary);
+            --pill-active-bg: var(--accent-color);
+            --pill-active-color: var(--accent-text);
+            --pill-active-border: none;
+            --pill-active-shadow: 0 2px 8px rgba(var(--accent-color-rgb), 0.2);
+            --progress-fill-bg: var(--accent-color);
+            --user-bubble-bg: var(--accent-color);
+            --user-bubble-color: var(--accent-text);
+            --user-bubble-shadow: 0 2px 8px rgba(var(--accent-color-rgb), 0.25);
+            --resize-line-bg: var(--divider);
+            --tool-btn-hover-bg: var(--bg-tertiary);
+            --tool-btn-hover-color: var(--text-primary);
         }
 
         [data-theme="light"] {
@@ -111,52 +127,34 @@
             border-top: 0.5px solid rgba(203, 213, 225, 0.4);
         }
 
-        [data-theme="colorful"] .pill {
-            background: rgba(102, 126, 234, 0.15);
-            color: #667eea;
-            font-weight: 600;
-            border: 1px solid rgba(102, 126, 234, 0.3);
-        }
-
-        [data-theme="colorful"] .pill:hover {
-            background: rgba(102, 126, 234, 0.25);
-            transform: translateY(-1px);
-        }
-
-        [data-theme="colorful"] .pill[data-active="true"] {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: #ffffff;
-            border: none;
-            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
-        }
-
-        [data-theme="colorful"] .progress-fill {
-            background: linear-gradient(90deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
-        }
-
-        [data-theme="colorful"] .message.user .content {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: #ffffff;
-            box-shadow: 0 3px 10px rgba(102, 126, 234, 0.25);
+        [data-theme="colorful"] {
+            --pill-bg: rgba(102, 126, 234, 0.15);
+            --pill-color: #667eea;
+            --pill-font-weight: 600;
+            --pill-border: 1px solid rgba(102, 126, 234, 0.3);
+            --pill-hover-bg: rgba(102, 126, 234, 0.25);
+            --pill-active-bg: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --pill-active-color: #ffffff;
+            --pill-active-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+            --progress-fill-bg: linear-gradient(90deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            --user-bubble-bg: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --user-bubble-color: #ffffff;
+            --user-bubble-shadow: 0 3px 10px rgba(102, 126, 234, 0.25);
+            --resize-line-bg: linear-gradient(90deg, #667eea, #764ba2, #f093fb);
+            --tool-btn-hover-bg: rgba(102, 126, 234, 0.15);
+            --tool-btn-hover-color: #667eea;
         }
 
         [data-theme="colorful"] .resize-handle {
             background: rgba(255, 255, 255, 0.5);
         }
 
-        [data-theme="colorful"] .resize-line {
-            background: linear-gradient(90deg, #667eea, #764ba2, #f093fb);
-        }
 
         [data-theme="colorful"] .modal-content {
             background: rgba(255, 255, 255, 0.95);
             backdrop-filter: blur(20px);
         }
 
-        [data-theme="colorful"] .tool-btn:hover {
-            background: rgba(102, 126, 234, 0.15);
-            color: #667eea;
-        }
         
         * { 
             box-sizing: border-box; 
@@ -417,10 +415,10 @@
         }
 
         .message.user .content {
-            background: var(--accent-color);
-            color: var(--accent-text);
+            background: var(--user-bubble-bg);
+            color: var(--user-bubble-color);
             border-bottom-right-radius: 4px;
-            box-shadow: 0 2px 8px rgba(var(--accent-color-rgb), 0.25);
+            box-shadow: var(--user-bubble-shadow);
         }
 
         .message.assistant .content {
@@ -460,9 +458,9 @@
 
         .tool-btn:hover { 
             opacity: 1;
-            background: var(--bg-tertiary);
+            background: var(--tool-btn-hover-bg);
             backdrop-filter: blur(8px);
-            color: var(--text-primary);
+            color: var(--tool-btn-hover-color);
             transform: translateY(-1px);
         }
 
@@ -493,11 +491,11 @@
             flex: 1;
             padding: 8px 0;
             font-size: 12px;
-            font-weight: 500;
+            font-weight: var(--pill-font-weight);
             border-radius: 8px;
-            background: var(--bg-secondary);
-            color: var(--text-primary);
-            border: none;
+            background: var(--pill-bg);
+            color: var(--pill-color);
+            border: var(--pill-border);
             cursor: pointer;
             transition: all 0.2s var(--ease);
             display: flex;
@@ -507,14 +505,15 @@
         }
 
         .pill:hover { 
-            background: var(--bg-tertiary); 
+            background: var(--pill-hover-bg); 
             transform: translateY(-1px);
         }
 
         .pill[data-active="true"] {
-            background: var(--accent-color);
-            color: var(--accent-text);
-            box-shadow: 0 2px 8px rgba(var(--accent-color-rgb), 0.2);
+            background: var(--pill-active-bg);
+            color: var(--pill-active-color);
+            border: var(--pill-active-border);
+            box-shadow: var(--pill-active-shadow);
             transform: scale(1.02);
         }
 
@@ -530,7 +529,7 @@
         .progress-fill {
             height: 100%; 
             width: 0%;
-            background: var(--accent-color);
+            background: var(--progress-fill-bg);
             transition: width 0.3s ease;
             
             will-change: width;
@@ -561,7 +560,7 @@
         .resize-line {
             width: 40px;
             height: 4px;
-            background: var(--divider);
+            background: var(--resize-line-bg);
             border-radius: 2px;
             transition: all 0.2s;
         }
@@ -887,11 +886,31 @@
             };
 
             let selectedLanguageValue = '';
+            let activeLanguageButton = null;
             let abortController = null;
             let chatHistory = [];
             let manuallyResized = false;
 
             let cachedSettings = null;
+
+            const STORAGE_KEYS = {
+                settings: 'AiTransatorSettings_v3',
+                panelRatio: 'panelRatio',
+                theme: 'theme'
+            };
+
+            function readStorageJSON(key, fallback = {}) {
+                try {
+                    return JSON.parse(localStorage.getItem(key) || JSON.stringify(fallback));
+                } catch (error) {
+                    console.warn('Storage read error:', error);
+                    return fallback;
+                }
+            }
+
+            function writeStorageJSON(key, value) {
+                localStorage.setItem(key, JSON.stringify(value));
+            }
 
             const BASE_URL = 'https://aia.gateway.dell.com/genai/dev/v1';
             const DEFAULTS = {
@@ -1032,7 +1051,7 @@ Answer questions directly and professionally.`
 
             function getSettings() {
                 if (!cachedSettings) {
-                    const saved = JSON.parse(localStorage.getItem('AiTransatorSettings_v3') || '{}');
+                    const saved = readStorageJSON(STORAGE_KEYS.settings, {});
                     cachedSettings = { ...DEFAULTS, ...saved };
                 }
                 return cachedSettings;
@@ -1126,43 +1145,61 @@ Need help? Contact your Dell IT administrator.`;
 
             let streamUpdateScheduled = false;
             let pendingStreamContent = '';
+            let pendingStreamFinal = false;
+            let lastStreamRenderTime = 0;
+            const STREAM_UPDATE_INTERVAL_MS = 50;
             
             function appendStreamingMessage(content, isFinal = false) {
                 pendingStreamContent = content;
-                
-                if (!streamUpdateScheduled) {
+                pendingStreamFinal = pendingStreamFinal || isFinal;
+
+                if (streamUpdateScheduled) return;
+
+                const scheduleRender = () => {
                     streamUpdateScheduled = true;
                     requestAnimationFrame(() => {
+                        const now = performance.now();
+                        const shouldDelay = !pendingStreamFinal && (now - lastStreamRenderTime) < STREAM_UPDATE_INTERVAL_MS;
+
+                        if (shouldDelay) {
+                            streamUpdateScheduled = false;
+                            setTimeout(scheduleRender, STREAM_UPDATE_INTERVAL_MS - (now - lastStreamRenderTime));
+                            return;
+                        }
+
                         const existingStreaming = elements.chatContainer.querySelector('.message.assistant.streaming');
-                        
+
                         if (!existingStreaming) {
                             const messageDiv = document.createElement('div');
-                            messageDiv.className = 'message assistant streaming';
-                            
+                            messageDiv.className = `message assistant${pendingStreamFinal ? '' : ' streaming'}`;
+
                             const avatar = document.createElement('div');
                             avatar.className = 'avatar';
                             avatar.textContent = '🤖';
-                            
+
                             const contentDiv = document.createElement('div');
                             contentDiv.className = 'content';
                             contentDiv.textContent = pendingStreamContent;
-                            
+
                             messageDiv.appendChild(avatar);
                             messageDiv.appendChild(contentDiv);
                             elements.chatContainer.appendChild(messageDiv);
                         } else {
                             const contentDiv = existingStreaming.querySelector('.content');
                             contentDiv.textContent = pendingStreamContent;
-                        }
-
-                        if (isFinal) {
-                            existingStreaming?.classList.remove('streaming');
+                            if (pendingStreamFinal) {
+                                existingStreaming.classList.remove('streaming');
+                            }
                         }
 
                         scrollChatToBottom();
+                        lastStreamRenderTime = performance.now();
+                        pendingStreamFinal = false;
                         streamUpdateScheduled = false;
                     });
-                }
+                };
+
+                scheduleRender();
             }
 
             let userIsAtBottom = true;
@@ -1213,7 +1250,7 @@ Need help? Contact your Dell IT administrator.`;
 
             function switchTheme(theme) {
                 document.documentElement.setAttribute('data-theme', theme);
-                localStorage.setItem('theme', theme);
+                localStorage.setItem(STORAGE_KEYS.theme, theme);
                 
                 elements.themeDots.forEach(dot => {
                     if (dot.dataset.theme === theme) {
@@ -1253,8 +1290,12 @@ Need help? Contact your Dell IT administrator.`;
                 if (settings.chatHistoryLimit < 5) settings.chatHistoryLimit = 5;
                 if (settings.chatHistoryLimit > 100) settings.chatHistoryLimit = 100;
                 
-                localStorage.setItem('AiTransatorSettings_v3', JSON.stringify(settings));
-                invalidateSettingsCache();
+                const prevSettings = getSettings();
+                const hasChanged = JSON.stringify(prevSettings) !== JSON.stringify(settings);
+                if (hasChanged) {
+                    writeStorageJSON(STORAGE_KEYS.settings, settings);
+                    invalidateSettingsCache();
+                }
                 
                 trimChatHistory();
                 if (selectedLanguageValue === 'chat') {
@@ -1286,7 +1327,7 @@ Need help? Contact your Dell IT administrator.`;
 
             function restoreDefaultSettings() {
                 if(confirm('Reset all settings to default?')) {
-                    localStorage.removeItem('AiTransatorSettings_v3');
+                    localStorage.removeItem(STORAGE_KEYS.settings);
                     invalidateSettingsCache();
                     loadSettings();
                 }
@@ -1349,16 +1390,16 @@ Need help? Contact your Dell IT administrator.`;
                     if (manuallyResized) {
                         const inputFlex = elements.inputPanel.style.flex;
                         const outputFlex = elements.outputPanel.style.flex;
-                        localStorage.setItem('panelRatio', JSON.stringify({
+                        writeStorageJSON(STORAGE_KEYS.panelRatio, {
                             input: inputFlex,
                             output: outputFlex
-                        }));
+                        });
                     }
                 }
             });
 
             try {
-                const savedRatio = JSON.parse(localStorage.getItem('panelRatio') || '{}');
+                const savedRatio = readStorageJSON(STORAGE_KEYS.panelRatio, {});
                 if (savedRatio.input && savedRatio.output) {
                     elements.inputPanel.style.flex = savedRatio.input;
                     elements.outputPanel.style.flex = savedRatio.output;
@@ -1435,6 +1476,32 @@ Need help? Contact your Dell IT administrator.`;
                 });
             }
 
+
+            function formatRequestError(error) {
+                const rawMessage = error?.message || 'Unknown error';
+
+                if (rawMessage.startsWith('API_HTTP_')) {
+                    const status = rawMessage.replace('API_HTTP_', '');
+                    return `Request failed (HTTP ${status}). Please verify credentials or API status.`;
+                }
+
+                if (/Failed to fetch|NetworkError/i.test(rawMessage)) {
+                    return 'Network connection failed. Please check your VPN or network and retry.';
+                }
+
+                return `Request failed: ${rawMessage}`;
+            }
+
+            function renderRequestError(error) {
+                const message = formatRequestError(error);
+                if (selectedLanguageValue === 'chat') {
+                    appendStreamingMessage(`⚠️ ${message}`, true);
+                } else {
+                    elements.resultTextarea.value = `⚠️ ${message}`;
+                }
+                elements.progressBarFill.style.background = '#ff3b30';
+            }
+
             async function handleTranslate() {
                 const text = elements.inputTextarea.value.trim();
                 if (!text) return;
@@ -1482,7 +1549,7 @@ Need help? Contact your Dell IT administrator.`;
                         signal: abortController.signal
                     });
 
-                    if (!response.ok) throw new Error(`API Error: ${response.status}`);
+                    if (!response.ok) throw new Error(`API_HTTP_${response.status}`);
 
                     elements.progressBarFill.style.width = '60%';
                     
@@ -1536,12 +1603,7 @@ Need help? Contact your Dell IT administrator.`;
                         return;
                     }
                     
-                    if (selectedLanguageValue === 'chat') {
-                        appendStreamingMessage(`Error: ${error.message}`, true);
-                    } else {
-                        elements.resultTextarea.value = `Error: ${error.message}`;
-                    }
-                    elements.progressBarFill.style.background = '#ff3b30';
+                    renderRequestError(error);
                 } finally {
                     elements.langButtons.forEach(b => b.disabled = false);
                     setTimeout(() => {
@@ -1554,11 +1616,13 @@ Need help? Contact your Dell IT administrator.`;
 
             function setActiveLanguageButton(val, skipTranslate = false) {
                 selectedLanguageValue = val;
-                elements.langButtons.forEach(b => {
-                    if (b.dataset.value === val) {
-                        b.setAttribute('data-active', 'true');
+                activeLanguageButton = null;
+                elements.langButtons.forEach((button) => {
+                    if (button.dataset.value === val) {
+                        button.setAttribute('data-active', 'true');
+                        activeLanguageButton = button;
                     } else {
-                        b.removeAttribute('data-active');
+                        button.removeAttribute('data-active');
                     }
                 });
                 
@@ -1607,7 +1671,7 @@ Need help? Contact your Dell IT administrator.`;
 
             loadSettings();
             
-            const currentTheme = localStorage.getItem('theme') || 'light';
+            const currentTheme = localStorage.getItem(STORAGE_KEYS.theme) || 'light';
             elements.themeDots.forEach(dot => {
                 if (dot.dataset.theme === currentTheme) {
                     dot.classList.add('active');
